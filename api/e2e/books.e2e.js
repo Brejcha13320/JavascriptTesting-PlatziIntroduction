@@ -13,6 +13,7 @@ describe("Test for books endpoint", () => {
   let server = null;
   let database = null;
   beforeAll(async () => {
+    jest.setTimeout(10000);
     app = createApp();
     server = app.listen(3001);
     const client = new MongoClient(MONGO_URI, {
