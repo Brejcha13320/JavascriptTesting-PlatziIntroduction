@@ -29,3 +29,29 @@ jobs:
 
       - name: Run Unit Test
         run: npm run test
+
+  e2e:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20.9.0
+    services:
+      mongo-e2e:
+        image: mongo:4.4
+        ports:
+          - 27018:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: test
+          MONGO_INITDB_ROOT_PASSWORD: test123
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm ci # npm i pero Entorno de CI
+
+      - name: Run Unit Test
+        run: npm run test:e2e
+        env:
+          MONGO_DB_NAME: demo
+          MONGO_URL: mongodb://test:test123@mongo-e2e:27018?retryWrites=true&writeConcern=majority
